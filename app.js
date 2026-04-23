@@ -1,7 +1,7 @@
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-    res.write("Hello World - Version 1");
+    res.write("Hello World - Version 2");
     res.end();
 });
 
