@@ -17,8 +17,19 @@ pipeline {
         stage('Run App') {
             steps {
                 sh '''
+                echo "Stopping old app"
                 pkill node || true
-                nohup node app.js > app.log 2>&1 &
+
+                echo "Starting app in detached mode"
+                nohup setsid node app.js > app.log 2>&1 < /dev/null &
+
+                sleep 5
+
+                echo "Running processes:"
+                ps aux | grep node
+
+                echo "App log:"
+                cat app.log
                 '''
             }
         }
