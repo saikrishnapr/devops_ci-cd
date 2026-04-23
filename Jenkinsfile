@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Clone') {
             steps {
                 git branch: 'main', url: 'https://github.com/isaikrishna15/devops_ci-cd.git'
@@ -18,20 +19,16 @@ pipeline {
             steps {
                 sh '''
                 echo "Stopping old app"
-                pkill node || true
+                pm2 delete myapp || true
 
-                echo "Starting app in detached mode"
-                nohup setsid node app.js > app.log 2>&1 < /dev/null &
+                echo "Starting app with PM2"
+                pm2 start app.js --name myapp
 
-                sleep 5
-
-                echo "Running processes:"
-                ps aux | grep node
-
-                echo "App log:"
-                cat app.log
+                pm2 save
+                pm2 list
                 '''
             }
         }
+
     }
 }
